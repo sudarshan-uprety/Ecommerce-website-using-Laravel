@@ -144,10 +144,12 @@
 
             </table>
             
-          </form>
-          <button id="payment-button">Pay with Khalti</button>
+          
+        </form>
+        <button id="payment-button">Pay with Khalti</button>
 
         </div>
+
 
 
     
@@ -156,7 +158,9 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+        
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 
     <!-- Additional Scripts -->
     <script src="assets/js/custom.js"></script>
@@ -176,7 +180,6 @@
           }
       }
     </script>
-<script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 <script>
   var config = {
       // replace the publicKey with yours
@@ -195,6 +198,29 @@
           onSuccess (payload) {
               // hit merchant api for initiating verfication
               console.log(payload);
+               if(payload.idx) 
+               {
+                   $.ajaxSetup({
+                       headers: {
+                                  'X-CSRF-TOKEN' : '{{csrf_token()}}',
+                                }
+                               });
+                           $.ajax({
+                               method: 'POST',
+                                url: "{{route('khalti.verify')}}",
+                                 data: payload,
+                                  success: function(response)
+                                   { 
+                                      console.log('successfully paid'); 
+                                      
+                                      //window.location = '/order';
+                                   },
+                                    error: function(data) 
+                                    {
+                                       console.log(data.message);
+                                    } 
+                                   });
+               }
           },
           onError (error) {
               console.log(error);

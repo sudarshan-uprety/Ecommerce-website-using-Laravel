@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\KhaltiController;
+use App\Http\Controllers\khalticontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,3 +60,5 @@ route::post('/order',[HomeController::class,'confirmorder']);
 route::get('/showorder',[AdminController::class,'showorder']);
 
 route::get('/updatestatus/{id}',[AdminController::class,'updatestatus']);
+
+Route::post('khalti/verify',[khalticontroller::class,'verify'])->name('khalti.verify');
